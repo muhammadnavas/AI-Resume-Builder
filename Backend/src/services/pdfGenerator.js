@@ -15,6 +15,31 @@ class PDFGenerator {
         }
     }
 
+    // Helper function to check if date is valid (not placeholder)
+    isValidDate(date) {
+        if (!date) return false;
+        if (date.includes('MM/YYYY')) return false;
+        if (date === 'MM/YYYY') return false;
+        if (date.toLowerCase().includes('present')) return true;
+        if (date.toLowerCase().includes('current')) return true;
+        return date.trim() !== '';
+    }
+
+    // Helper function to format date range
+    formatDateRange(startDate, endDate) {
+        const validStart = this.isValidDate(startDate);
+        const validEnd = this.isValidDate(endDate);
+        
+        if (validStart && validEnd) {
+            return `${startDate} - ${endDate}`;
+        } else if (validStart && !validEnd) {
+            return `${startDate} - Present`;
+        } else if (!validStart && validEnd) {
+            return endDate;
+        }
+        return '';
+    }
+
     async generateResumeHTML(resumeData) {
         return `
 <!DOCTYPE html>
@@ -32,8 +57,8 @@ class PDFGenerator {
         
         body {
             font-family: Arial, sans-serif;
-            font-size: 12px;
-            line-height: 1.4;
+            font-size: 14px;
+            line-height: 1.5;
             color: #333;
             background: white;
             padding: 40px;
@@ -52,7 +77,7 @@ class PDFGenerator {
         }
         
         .name {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
             margin-bottom: 8px;
             text-transform: uppercase;
@@ -63,7 +88,7 @@ class PDFGenerator {
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
-            font-size: 11px;
+            font-size: 13px;
         }
         
         .contact-item {
@@ -77,7 +102,7 @@ class PDFGenerator {
         }
         
         .section-title {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             text-transform: uppercase;
             border-bottom: 1px solid #ccc;
@@ -102,11 +127,11 @@ class PDFGenerator {
         
         .item-subtitle {
             color: #666;
-            font-size: 11px;
+            font-size: 13px;
         }
         
         .item-date {
-            font-size: 11px;
+            font-size: 13px;
             color: #666;
             margin-left: auto;
         }
@@ -118,12 +143,14 @@ class PDFGenerator {
         }
         
         .responsibilities li {
-            margin-bottom: 2px;
+            margin-bottom: 3px;
+            font-size: 14px;
         }
         
         .skills-grid {
             display: grid;
             gap: 4px;
+            font-size: 14px;
         }
         
         .skill-category {
@@ -143,11 +170,13 @@ class PDFGenerator {
         
         .achievements li {
             margin-bottom: 3px;
+            font-size: 14px;
         }
         
         .summary {
             text-align: justify;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: 14px;
         }
         
         .ats-score {
@@ -208,7 +237,7 @@ class PDFGenerator {
                             ${edu.description ? `<div class="item-subtitle">${edu.description}</div>` : ''}
                         </div>
                         <div class="item-date">
-                            ${edu.startDate && edu.endDate ? `${edu.startDate} - ${edu.endDate}` : (edu.duration || '')}
+                            ${this.formatDateRange(edu.startDate, edu.endDate) || (this.isValidDate(edu.duration) ? edu.duration : '')}
                         </div>
                     </div>
                 </div>
@@ -265,7 +294,7 @@ class PDFGenerator {
                             <div class="item-subtitle">${exp.companyName || exp.company}</div>
                             ${exp.city && exp.state ? `<div class="item-subtitle">${exp.city}, ${exp.state}</div>` : ''}
                         </div>
-                        <div class="item-date">${exp.startDate && exp.endDate ? `${exp.startDate} - ${exp.endDate}` : (exp.duration || '')}</div>
+                        <div class="item-date">${this.formatDateRange(exp.startDate, exp.endDate) || (this.isValidDate(exp.duration) ? exp.duration : '')}</div>
                     </div>
                     ${exp.workSummary ? `
                         <ul class="responsibilities">
@@ -290,7 +319,7 @@ class PDFGenerator {
                 <div class="project-item">
                     <div class="item-header">
                         <div class="item-title">${project.title || project.name}</div>
-                        ${project.startDate && project.endDate ? `<div class="item-date">${project.startDate} - ${project.endDate}</div>` : (project.duration ? `<div class="item-date">${project.duration}</div>` : '')}
+                        ${this.formatDateRange(project.startDate, project.endDate) ? `<div class="item-date">${this.formatDateRange(project.startDate, project.endDate)}</div>` : (this.isValidDate(project.duration) ? `<div class="item-date">${project.duration}</div>` : '')}
                     </div>
                     ${project.technologies ? `
                         <div class="item-subtitle">Technologies: ${Array.isArray(project.technologies) ? project.technologies.join(', ') : project.technologies}</div>
