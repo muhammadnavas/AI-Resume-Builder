@@ -190,20 +190,6 @@ function ResumePreview({ data }) {
         </section>
       )}
 
-      {/* ATS Score */}
-      {data.atsScore && (
-        <div className="mt-6 pt-4 border-t border-gray-300">
-          <div className="flex items-center justify-between">
-            <span className="font-semibold text-gray-900">ATS Score:</span>
-            <span className={`font-bold ${
-              data.atsScore >= 80 ? 'text-green-600' : 
-              data.atsScore >= 60 ? 'text-yellow-600' : 'text-red-600'
-            }`}>
-              {data.atsScore}/100
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

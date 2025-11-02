@@ -179,24 +179,6 @@ class PDFGenerator {
             font-size: 14px;
         }
         
-        .ats-score {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #ccc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .score {
-            font-weight: bold;
-            font-size: 14px;
-        }
-        
-        .score.high { color: #22c55e; }
-        .score.medium { color: #eab308; }
-        .score.low { color: #ef4444; }
-        
         @media print {
             body { padding: 0; }
             .resume-container { margin: 0; }
@@ -347,15 +329,6 @@ class PDFGenerator {
         </div>
         ` : ''}
 
-        ${resumeData.atsScore ? `
-        <!-- ATS Score -->
-        <div class="ats-score">
-            <span>ATS Score:</span>
-            <span class="score ${resumeData.atsScore >= 80 ? 'high' : resumeData.atsScore >= 60 ? 'medium' : 'low'}">
-                ${resumeData.atsScore}/100
-            </span>
-        </div>
-        ` : ''}
     </div>
 </body>
 </html>
