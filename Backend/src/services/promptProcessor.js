@@ -166,6 +166,12 @@ class PromptProcessor {
             }
             
             console.log('✅ Successfully parsed Grok resume data');
+            
+            // Calculate ATS Score
+            const atsScore = this.calculateATSScore(resumeData);
+            resumeData.atsScore = atsScore;
+            console.log('📊 ATS Score:', atsScore);
+            
             return {
                 success: true,
                 data: resumeData,
@@ -265,6 +271,12 @@ class PromptProcessor {
             }
             
             console.log('✅ Successfully parsed Gemini resume data');
+            
+            // Calculate ATS Score
+            const atsScore = this.calculateATSScore(resumeData);
+            resumeData.atsScore = atsScore;
+            console.log('📊 ATS Score:', atsScore);
+            
             return {
                 success: true,
                 data: resumeData,
@@ -421,6 +433,12 @@ class PromptProcessor {
             console.log('Experience count:', resumeData.experience?.length);
             console.log('Education count:', resumeData.education?.length);
             console.log('Projects count:', resumeData.projects?.length);
+            
+            // Calculate ATS Score
+            const atsScore = this.calculateATSScore(resumeData);
+            resumeData.atsScore = atsScore;
+            console.log('📊 ATS Score:', atsScore);
+            
             return {
                 success: true,
                 data: resumeData,
