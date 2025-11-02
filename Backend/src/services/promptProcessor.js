@@ -129,6 +129,20 @@ class PromptProcessor {
         - If information is missing, create realistic professional examples
         `;
 
+        // Update the prompt to include achievements
+        const updatedPrompt = enhancedPrompt.replace(
+            /]\s*}\s*Guidelines:/,
+            `],
+            "achievements": [
+                "Won 1st place in XYZ Hackathon 2024",
+                "Published research paper on ABC topic",
+                "Certified in DEF technology"
+            ]
+        }
+        
+        Guidelines:`
+        );
+
         const completion = await openai.chat.completions.create({
             model: "grok-beta",
             messages: [
@@ -138,7 +152,7 @@ class PromptProcessor {
                 },
                 {
                     role: "user", 
-                    content: enhancedPrompt
+                    content: updatedPrompt
                 }
             ],
             temperature: 0.7,
@@ -247,7 +261,21 @@ class PromptProcessor {
         - If information is missing, create realistic professional examples
         `;
 
-        const result = await this.model.generateContent(enhancedPrompt);
+        // Update the prompt to include achievements
+        const updatedPrompt = enhancedPrompt.replace(
+            /]\s*}\s*Guidelines:/,
+            `],
+            "achievements": [
+                "Won 1st place in XYZ Hackathon 2024",
+                "Published research paper on ABC topic",
+                "Certified in DEF technology"
+            ]
+        }
+        
+        Guidelines:`
+        );
+
+        const result = await this.model.generateContent(updatedPrompt);
         const response = await result.response;
         const text = response.text();
         
@@ -379,6 +407,20 @@ class PromptProcessor {
         console.log(enhancedPrompt);
         console.log('*'.repeat(60));
 
+        // Update the prompt to include achievements
+        const updatedPrompt = enhancedPrompt.replace(
+            /]\s*}\s*Guidelines:/,
+            `],
+            "achievements": [
+                "Won 1st place in XYZ Hackathon 2024",
+                "Published research paper on ABC topic",
+                "Certified in DEF technology"
+            ]
+        }
+        
+        Guidelines:`
+        );
+
         const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
@@ -388,7 +430,7 @@ class PromptProcessor {
                 },
                 {
                     role: "user", 
-                    content: enhancedPrompt
+                    content: updatedPrompt
                 }
             ],
             temperature: 0.7,
@@ -433,6 +475,7 @@ class PromptProcessor {
             console.log('Experience count:', resumeData.experience?.length);
             console.log('Education count:', resumeData.education?.length);
             console.log('Projects count:', resumeData.projects?.length);
+            console.log('Achievements count:', resumeData.achievements?.length);
             
             // Calculate ATS Score
             const atsScore = this.calculateATSScore(resumeData);
@@ -628,6 +671,13 @@ class PromptProcessor {
                 proj.description && proj.description.length >= 2
             );
             if (hasDetailedProjects) score += 5;
+        }
+        
+        // Achievements (10 points)
+        if (resumeData.achievements && resumeData.achievements.length > 0) {
+            score += 5;
+            // Bonus for multiple achievements
+            if (resumeData.achievements.length >= 3) score += 5;
         }
         
         return Math.min(score, maxScore);
