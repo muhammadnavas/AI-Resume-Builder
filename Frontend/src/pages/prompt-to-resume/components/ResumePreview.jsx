@@ -69,7 +69,11 @@ function ResumePreview({ data }) {
                   {edu.description && <p className="text-sm text-gray-600 mt-1">{edu.description}</p>}
                 </div>
                 <div className="text-right text-sm text-gray-600">
-                  <p>{edu.startDate} - {edu.endDate}</p>
+                  {(edu.startDate && edu.endDate && 
+                    edu.startDate !== 'MM/YYYY' && edu.endDate !== 'MM/YYYY' &&
+                    !edu.startDate.includes('MM/YYYY') && !edu.endDate.includes('MM/YYYY')) && (
+                    <p>{edu.startDate} - {edu.endDate}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -83,22 +87,8 @@ function ResumePreview({ data }) {
           <h2 className="text-lg font-bold text-gray-900 border-b border-gray-300 mb-2">
             TECHNICAL SKILLS
           </h2>
-          <div className="grid grid-cols-2 gap-2">
-            {data.skills.map((skill, index) => (
-              <div key={index} className="flex justify-between items-center">
-                <span className="text-gray-700">{skill.name}</span>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className={`w-2 h-2 rounded-full mr-1 ${
-                        i < skill.rating ? 'bg-indigo-600' : 'bg-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="text-sm text-gray-700">
+            {data.skills.map(skill => skill.name).join(' • ')}
           </div>
         </section>
       )}
@@ -119,7 +109,11 @@ function ResumePreview({ data }) {
                     <p className="text-sm text-gray-600">{exp.city}, {exp.state}</p>
                   )}
                 </div>
-                <p className="text-sm text-gray-600">{exp.startDate} - {exp.endDate}</p>
+                {(exp.startDate && exp.endDate && 
+                  exp.startDate !== 'MM/YYYY' && exp.endDate !== 'MM/YYYY' &&
+                  !exp.startDate.includes('MM/YYYY') && !exp.endDate.includes('MM/YYYY')) && (
+                  <p className="text-sm text-gray-600">{exp.startDate} - {exp.endDate}</p>
+                )}
               </div>
               {exp.workSummary && (
                 <div className="text-sm text-gray-700 mt-2">
@@ -150,11 +144,13 @@ function ResumePreview({ data }) {
             <div key={index} className="mb-3">
               <div className="flex justify-between items-start mb-1">
                 <h3 className="font-semibold text-gray-900">{project.title || project.name}</h3>
-                {(project.startDate && project.endDate) ? (
+                {(project.startDate && project.endDate && 
+                  project.startDate !== 'MM/YYYY' && project.endDate !== 'MM/YYYY' &&
+                  !project.startDate.includes('MM/YYYY') && !project.endDate.includes('MM/YYYY')) ? (
                   <p className="text-sm text-gray-600">{project.startDate} - {project.endDate}</p>
-                ) : project.duration && (
+                ) : (project.duration && project.duration !== 'MM/YYYY' && !project.duration.includes('MM/YYYY')) ? (
                   <p className="text-sm text-gray-600">{project.duration}</p>
-                )}
+                ) : null}
               </div>
               {project.technologies && (
                 <p className="text-sm text-gray-600 mb-1">
